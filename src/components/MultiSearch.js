@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import { Loading } from 'react-simple-chatbot';
-import { bc, bc_topic, dpr, dpr_topic, topic, keyword_grade, keyword_major } from '../dummy/data.json';
+// import { bc, bc_topic, dpr, dpr_topic, topic, keyword_grade, keyword_major } from '../dummy/data.json';
 import '../styles/accordion.css';
 import { v4 as uuidv4 } from 'uuid';
 
 export default class MultiSearch extends Component {
     constructor(props) {
         super(props);
-        console.log(props);
         this.state = {
             loading: true,
             trigger: false,
@@ -18,53 +17,70 @@ export default class MultiSearch extends Component {
     }
 
     async componentWillMount() {
+
+        const arrayBcs = [this.props.bcs]
+        const arrayBc_topics = [this.props.bc_topics]
+        const arrayDprs = [this.props.dprs]
+        const arrayDpr_topics = [this.props.dpr_topics]
+        const arrayTopics = [this.props.topics]
+        const arrayKeyword_grades = [this.props.keyword_grades]
+        const arrayKeyword_majors = [this.props.keyword_majors]
+
+        const bcs = arrayBcs[0]
+        const bc_topics = arrayBc_topics[0]
+        const dprs = arrayDprs[0]
+        const dpr_topics = arrayDpr_topics[0]
+        const topics = arrayTopics[0]
+        const keyword_grades = arrayKeyword_grades[0]
+        const keyword_majors = arrayKeyword_majors[0]
+
         const { steps } = this.props;
         const { search_level, search_subject, level, subject, search } = steps;
 
         let grade = []
         let major = []
 
-        keyword_grade.map(child_grade => {
-            if (search.value.trim().toLowerCase().includes(child_grade.keyword.trim().toLowerCase())) grade = [child_grade]
+        keyword_grades.map(child_grade => {
+            if (search.value.trim().toLowerCase().includes(child_grade.attributes.keyword.trim().toLowerCase())) grade = [child_grade.attributes]
         })
-        keyword_major.map(child_major => {
-            if (search.value.trim().toLowerCase().includes(child_major.keyword.trim().toLowerCase())) major = [child_major]
+        keyword_majors.map(child_major => {
+            if (search.value.trim().toLowerCase().includes(child_major.attributes.keyword.trim().toLowerCase())) major = [child_major.attributes]
         })
 
         search.value.trim().toLowerCase().split(/[\s,]+/).map(value => {
-            keyword_grade.map(child_grade => {
-                if (child_grade.keyword.trim().toLowerCase() === value) grade = [child_grade]
+            keyword_grades.map(child_grade => {
+                if (child_grade.attributes.keyword.trim().toLowerCase() === value) grade = [child_grade.attributes]
             })
-            keyword_major.map(child_major => {
-                if (child_major.keyword.trim().toLowerCase() === value) major = [child_major]
+            keyword_majors.map(child_major => {
+                if (child_major.attributes.keyword.trim().toLowerCase() === value) major = [child_major.attributes]
             })
         })
 
         const levelSearch = grade.length > 0 ? grade[0].grade_id : null
         const subjectSearch = major.length > 0 ? major[0].major_id : null
         const results = await Promise.all([
-            (await Promise.all(bc.map(row => {
+            (await Promise.all(bcs.map(row => {
                 try {
                     if (levelSearch) {
-                        if (row.grade_id == levelSearch && row.major_id == search_subject.value) {
-                            const filter = bc_topic.filter(bc => bc.id == row.id)
-                            const category = filter.length > 0 ? topic.filter((topic) => topic.id == filter[0].topic_id) : false
+                        if (row.attributes.grade_id == levelSearch && row.attributes.major_id == search_subject.value) {
+                            const filter = bc_topics.filter(bc => bc.id == row.id)
+                            const category = filter.length > 0 ? topics.filter((topic) => topic.id == filter[0].attributes.topic_id) : false
                             return {
-                                name: row.name,
-                                image: row.image,
-                                link: row.link,
-                                topic: category ? (category.length > 0 ? category[0].name : null) : null
+                                name: row.attributes.name,
+                                image: process.env.REACT_APP_SECRET_CODE + row.attributes.image.data.attributes.url,
+                                link: row.attributes.link,
+                                topic: category ? (category.length > 0 ? category[0].attributes.name : null) : null
                             }
                         }
                     } else {
-                        if (row.grade_id == search_level.value && row.major_id == subjectSearch) {
-                            const filter = bc_topic.filter(bc => bc.id == row.id)
-                            const category = filter.length > 0 ? topic.filter((topic) => topic.id == filter[0].topic_id) : false
+                        if (row.attributes.grade_id == search_level.value && row.attributes.major_id == subjectSearch) {
+                            const filter = bc_topics.filter(bc => bc.id == row.id)
+                            const category = filter.length > 0 ? topics.filter((topic) => topic.id == filter[0].attributes.topic_id) : false
                             return {
-                                name: row.name,
-                                image: row.image,
-                                link: row.link,
-                                topic: category ? (category.length > 0 ? category[0].name : null) : null
+                                name: row.attributes.name,
+                                image: process.env.REACT_APP_SECRET_CODE + row.attributes.image.data.attributes.url,
+                                link: row.attributes.link,
+                                topic: category ? (category.length > 0 ? category[0].attributes.name : null) : null
                             }
                         }
                     }
@@ -72,29 +88,29 @@ export default class MultiSearch extends Component {
                 } catch (error) {
                     return false
                 }
-            }))).filter(bc => bc),
-            (await Promise.all(dpr.map(row => {
+            }))).filter(bcs => bcs),
+            (await Promise.all(dprs.map(row => {
                 try {
                     if (levelSearch) {
-                        if (row.grade_id == levelSearch && row.major_id == search_subject.value) {
-                            const filter = dpr_topic.filter(dpr => dpr.id == row.id)
-                            const category = filter.length > 0 ? topic.filter((topic) => topic.id == filter[0].topic_id) : false
+                        if (row.attributes.grade_id == levelSearch && row.attributes.major_id == search_subject.value) {
+                            const filter = dpr_topics.filter(dpr => dpr.id == row.id)
+                            const category = filter.length > 0 ? topics.filter((topic) => topic.id == filter[0].attributes.topic_id) : false
                             return {
-                                name: row.name,
-                                image: row.image,
-                                link: row.link,
-                                topic: category ? (category.length > 0 ? category[0].name : null) : null
+                                name: row.attributes.name,
+                                image: process.env.REACT_APP_SECRET_CODE + row.attributes.image.data.attributes.url,
+                                link: row.attributes.link,
+                                topic: category ? (category.length > 0 ? category[0].attributes.name : null) : null
                             }
                         }
                     } else {
-                        if (row.grade_id == search_level.value && row.major_id == subjectSearch) {
-                            const filter = dpr_topic.filter(dpr => dpr.id == row.id)
-                            const category = filter.length > 0 ? topic.filter((topic) => topic.id == filter[0].topic_id) : false
+                        if (row.attributes.grade_id == search_level.value && row.attributes.major_id == subjectSearch) {
+                            const filter = dpr_topics.filter(dpr => dpr.id == row.id)
+                            const category = filter.length > 0 ? topics.filter((topic) => topic.id == filter[0].attributes.topic_id) : false
                             return {
-                                name: row.name,
-                                image: row.image,
-                                link: row.link,
-                                topic: category ? (category.length > 0 ? category[0].name : null) : null
+                                name: row.attributes.name,
+                                image: process.env.REACT_APP_SECRET_CODE + row.attributes.image.data.attributes.url,
+                                link: row.attributes.link,
+                                topic: category ? (category.length > 0 ? category[0].attributes.name : null) : null
                             }
                         }
                     }
@@ -102,7 +118,7 @@ export default class MultiSearch extends Component {
                 } catch (error) {
                     return false
                 }
-            }))).filter(dpr => dpr),
+            }))).filter(dprs => dprs),
         ])
         this.setState({ level, subject, results, loading: false });
     }
@@ -148,7 +164,7 @@ export default class MultiSearch extends Component {
                                 <div className="box-content">
                                     <small>{row.topic}</small>
                                     <img
-                                    src={`/${row.image}`}
+                                    src={`${row.image}`}
                                     alt="img"
                                     style={{ width: "100%", height: "100%", borderRadius: "10px" }}
                                     />

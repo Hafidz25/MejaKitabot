@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Loading } from "react-simple-chatbot";
-import { bc, bc_topic, dpr, dpr_topic, topic } from "../dummy/data.json";
+// import { bc, bc_topic, dpr, dpr_topic, topic } from "../dummy/data.json";
 import "../styles/accordion.css";
 import { v4 as uuidv4 } from 'uuid';
 
@@ -19,30 +19,43 @@ export default class Results extends Component {
   }
 
   async componentWillMount() {
+
+    const arrayBcs = [this.props.bcs]
+        const arrayBc_topics = [this.props.bc_topics]
+        const arrayDprs = [this.props.dprs]
+        const arrayDpr_topics = [this.props.dpr_topics]
+        const arrayTopics = [this.props.topics]
+
+        const bcs = arrayBcs[0]
+        const bc_topics = arrayBc_topics[0]
+        const dprs = arrayDprs[0]
+        const dpr_topics = arrayDpr_topics[0]
+        const topics = arrayTopics[0]
+
     const { steps } = this.props;
     const { level, subject } = steps;
 
     const results = await Promise.all([
       (
         await Promise.all(
-          bc.map((row) => {
+          bcs.map((row) => {
             try {
               if (
-                row.grade_id == level.value &&
-                row.major_id == subject.value
+                row.attributes.grade_id == level.value &&
+                row.attributes.major_id == subject.value
               ) {
-                const filter = bc_topic.filter((bc) => bc.id == row.id);
+                const filter = bc_topics.filter((bc) => bc.id == row.id);
                 const category =
                   filter.length > 0
-                    ? topic.filter((topic) => topic.id == filter[0].topic_id)
+                    ? topics.filter((topic) => topic.id == filter[0].attributes.topic_id)
                     : false;
                 return {
-                  name: row.name,
-                  image: row.image,
-                  link: row.link,
+                  name: row.attributes.name,
+                  image: process.env.REACT_APP_SECRET_CODE + row.attributes.image.data.attributes.url,
+                  link: row.attributes.link,
                   topic: category
                     ? category.length > 0
-                      ? category[0].name
+                      ? category[0].attributes.name
                       : null
                     : null,
                 };
@@ -53,27 +66,27 @@ export default class Results extends Component {
             }
           })
         )
-      ).filter((bc) => bc),
+      ).filter((bcs) => bcs),
       (
         await Promise.all(
-          dpr.map((row) => {
+          dprs.map((row) => {
             try {
               if (
-                row.grade_id == level.value &&
-                row.major_id == subject.value
+                row.attributes.grade_id == level.value &&
+                row.attributes.major_id == subject.value
               ) {
-                const filter = dpr_topic.filter((dpr) => dpr.id == row.id);
+                const filter = dpr_topics.filter((dpr) => dpr.id == row.id);
                 const category =
                   filter.length > 0
-                    ? topic.filter((topic) => topic.id == filter[0].topic_id)
+                    ? topics.filter((topic) => topic.id == filter[0].attributes.topic_id)
                     : false;
                 return {
-                  name: row.name,
-                  image: row.image,
-                  link: row.link,
+                  name: row.attributes.name,
+                  image: process.env.REACT_APP_SECRET_CODE + row.attributes.image.data.attributes.url,
+                  link: row.attributes.link,
                   topic: category
                     ? category.length > 0
-                      ? category[0].name
+                      ? category[0].attributes.name
                       : null
                     : null,
                 };
@@ -84,7 +97,7 @@ export default class Results extends Component {
             }
           })
         )
-      ).filter((dpr) => dpr),
+      ).filter((dprs) => dprs),
     ]);
     this.setState({ level, subject, results, loading: false });
   }
@@ -134,7 +147,7 @@ export default class Results extends Component {
                       <div className="box-content">
                         <small>{row.topic}</small><br/>
                         <img
-                          src={`/${row.image}`}
+                          src={`${row.image}`}
                           alt="img"
                           style={{ width: "100%", height: "100%", borderRadius: "10px" }}
                         />

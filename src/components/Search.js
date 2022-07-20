@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Loading } from 'react-simple-chatbot';
-import { keyword_grade, keyword_major } from '../dummy/data.json';
-import { bc, bc_topic, dpr, dpr_topic, topic } from '../dummy/data.json';
+// import { keyword_grade, keyword_major } from '../dummy/data.json';
+// import { bc, bc_topic, dpr, dpr_topic, topic } from '../dummy/data.json';
 import "../styles/accordion.css";
 import { v4 as uuidv4 } from 'uuid';
 
@@ -22,6 +22,24 @@ export default class Search extends Component {
     }
 
     async componentWillMount() {
+
+        const arrayBcs = [this.props.bcs]
+        const arrayBc_topics = [this.props.bc_topics]
+        const arrayDprs = [this.props.dprs]
+        const arrayDpr_topics = [this.props.dpr_topics]
+        const arrayTopics = [this.props.topics]
+        const arrayKeyword_grades = [this.props.keyword_grades]
+        const arrayKeyword_majors = [this.props.keyword_majors]
+
+        const bcs = arrayBcs[0]
+        const bc_topics = arrayBc_topics[0]
+        const dprs = arrayDprs[0]
+        const dpr_topics = arrayDpr_topics[0]
+        const topics = arrayTopics[0]
+        const keyword_grades = arrayKeyword_grades[0]
+        const keyword_majors = arrayKeyword_majors[0]
+
+
         const { steps } = this.props;
         const { search } = steps;
         const values = search.value.trim().toLowerCase().split(/[\s,]+/)
@@ -29,26 +47,30 @@ export default class Search extends Component {
         let grade = []
         let major = []
 
-        keyword_grade.map(child_grade => {
-            if (search.value.trim().toLowerCase().includes(child_grade.keyword.trim().toLowerCase())) grade = [child_grade]
+        keyword_grades.map(child_grade => {
+            if (search.value.trim().toLowerCase().includes(child_grade.attributes.keyword.trim().toLowerCase())) grade = [child_grade.attributes]
         })
-        keyword_major.map(child_major => {
-            if (search.value.trim().toLowerCase().includes(child_major.keyword.trim().toLowerCase())) major = [child_major]
+        keyword_majors.map(child_major => {
+            if (search.value.trim().toLowerCase().includes(child_major.attributes.keyword.trim().toLowerCase())) major = [child_major.attributes]
         })
 
         values.map(value => {
-            keyword_grade.map(child_grade => {
-                if (child_grade.keyword.trim().toLowerCase() === value) grade = [child_grade]
+            keyword_grades.map(child_grade => {
+                if (child_grade.attributes.keyword.trim().toLowerCase() === value) grade = [child_grade.attributes]
             })
-            keyword_major.map(child_major => {
-                if (child_major.keyword.trim().toLowerCase() === value) major = [child_major]
+            keyword_majors.map(child_major => {
+                if (child_major.attributes.keyword.trim().toLowerCase() === value) major = [child_major.attributes]
             })
         })
 
         const includes = await Promise.all([
-            (await Promise.all(bc.map(child_bc => {
-                if (child_bc.name.toLocaleLowerCase() == search.value.trim().toLowerCase()) {
-                    return { id: child_bc.id, name: child_bc.name, image: child_bc.image, link: child_bc.link }
+            (await Promise.all(bcs.map(child_bc => {
+                if (child_bc.attributes.name.toLocaleLowerCase() == search.value.trim().toLowerCase()) {
+                    return { 
+                        id: child_bc.id, 
+                        name: child_bc.attributes.name, 
+                        image: process.env.REACT_APP_SECRET_CODE + child_bc.attributes.image.data.attributes.url, 
+                        link: child_bc.attributes.link }
                 } else {
                     let splitTopic = null
 
@@ -58,18 +80,26 @@ export default class Search extends Component {
                     }
 
                     values.map(value => {
-                        child_bc.name.trim().toLowerCase().split(/[\s,]+/).map(topic_word => {
+                        child_bc.attributes.name.trim().toLowerCase().split(/[\s,]+/).map(topic_word => {
                             if (!['bc', 'dpr'].includes(topic_word) && topic_word == value) {
-                                splitTopic = { id: child_bc.id, name: child_bc.name, image: child_bc.image, link: child_bc.link }
+                                splitTopic = { 
+                                    id: child_bc.id, 
+                                    name: child_bc.attributes.name, 
+                                    image: process.env.REACT_APP_SECRET_CODE + child_bc.attributes.image.data.attributes.url, 
+                                    link: child_bc.attributes.link }
                             }
                         })
                     })
                     return splitTopic || false
                 }
-            }))).filter(bc => bc),
-            (await Promise.all(dpr.map(child_dpr => {
-                if (child_dpr.name.toLocaleLowerCase() == search.value.trim().toLowerCase()) {
-                    return { id: child_dpr.id, name: child_dpr.name, image: child_dpr.image, link: child_dpr.link }
+            }))).filter(bcs => bcs),
+            (await Promise.all(dprs.map(child_dpr => {
+                if (child_dpr.attributes.name.toLocaleLowerCase() == search.value.trim().toLowerCase()) {
+                    return { 
+                        id: child_dpr.id, 
+                        name: child_dpr.attributes.name, 
+                        image: process.env.REACT_APP_SECRET_CODE + child_dpr.attributes.image.data.attributes.url, 
+                        link: child_dpr.attributes.link }
                 } else {
                     let splitTopic = null
 
@@ -79,39 +109,51 @@ export default class Search extends Component {
                     }
 
                     values.map(value => {
-                        child_dpr.name.trim().toLowerCase().split(/[\s,]+/).map(topic_word => {
+                        child_dpr.attributes.name.trim().toLowerCase().split(/[\s,]+/).map(topic_word => {
                             if (!['bc', 'dpr'].includes(topic_word) && topic_word == value) {
-                                splitTopic = { id: child_dpr.id, name: child_dpr.name, image: child_dpr.image, link: child_dpr.link }
+                                splitTopic = { 
+                                    id: child_dpr.id, 
+                                    name: child_dpr.attributes.name, 
+                                    image: process.env.REACT_APP_SECRET_CODE + child_dpr.attributes.image.data.attributes.url, 
+                                    link: child_dpr.attributes.link }
                             }
                         })
                     })
                     return splitTopic || false
                 }
-            }))).filter(dpr => dpr),
-            (await Promise.all(topic.map(topic => {
+            }))).filter(dprs => dprs),
+            (await Promise.all(topics.map(topic => {
                 let results = []
-                if (topic.name.toLowerCase().includes(search.value.toLowerCase()) || search.value.toLowerCase().includes(topic.name.toLowerCase())) {
-                    const dprTopics = dpr_topic.filter(dpr => dpr.topic_id == topic.id)
-                    const bcTopics = bc_topic.filter(bc => bc.topic_id == topic.id)
+                if (topic.attributes.name.toLowerCase().includes(search.value.toLowerCase()) || search.value.toLowerCase().includes(topic.attributes.name.toLowerCase())) {
+                    const dprTopics = dpr_topics.filter(dpr => dpr.attributes.topic_id == topic.id)
+                    const bcTopics = bc_topics.filter(bc => bc.attributes.topic_id == topic.id)
 
                     dprTopics.map(dprTopic => {
-                        dpr.map(child_dpr => {
+                        dprs.map(child_dpr => {
                             if (child_dpr.id == dprTopic.id) {
-                                results = [...results, { topic: topic.name, name: child_dpr.name, image: child_dpr.image, link: child_dpr.link }]
+                                results = [...results, { 
+                                    topic: topic.attributes.name, 
+                                    name: child_dpr.attributes.name, 
+                                    image: process.env.REACT_APP_SECRET_CODE + child_dpr.attributes.image.data.attributes.url, 
+                                    link: child_dpr.attributes.link }]
                             }
                         })
                     })
 
                     bcTopics.map(bcTopic => {
-                        bc.map(child_bc => {
+                        bcs.map(child_bc => {
                             if (child_bc.id == bcTopic.id) {
-                                results = [...results, { topic: topic.name, name: child_bc.name, image: child_bc.image, link: child_bc.link }]
+                                results = [...results, { 
+                                    topic: topic.attributes.name, 
+                                    name: child_bc.attributes.name, 
+                                    image: process.env.REACT_APP_SECRET_CODE + child_bc.attributes.image.data.attributes.url, 
+                                    link: child_bc.attributes.link }]
                             }
                         })
                     })
                 }
                 return results.length > 0 ? results : false
-            }))).filter(topic => topic),
+            }))).filter(topics => topics),
         ])
 
         const level = grade.length > 0 ? [grade[0]] : []
@@ -121,23 +163,23 @@ export default class Search extends Component {
 
         const topicFound = await Promise.all([
             includes[0].map(row => {
-                const filter = bc_topic.filter(bc => bc.bc_id == row.id)
-                const category = filter.length > 0 ? topic.filter((topic) => topic.id == filter[0].topic_id) : false
+                const filter = bc_topics.filter(bc => bc.attributes.bc_id == row.id)
+                const category = filter.length > 0 ? topics.filter((topic) => topic.id == filter[0].attributes.topic_id) : false
                 return {
                     name: row.name,
-                    image: row.image,
+                    image: process.env.REACT_APP_SECRET_CODE + row.image,
                     link: row.link,
-                    topic: category ? (category.length > 0 ? category[0].name : null) : null
+                    topic: category ? (category.length > 0 ? category[0].attributes.name : null) : null
                 }
             }),
             includes[1].map(row => {
-                const filter = dpr_topic.filter(dpr => dpr.dpr_id == row.id)
-                const category = filter.length > 0 ? topic.filter((topic) => topic.id == filter[0].topic_id) : false
+                const filter = dpr_topics.filter(dpr => dpr.attributes.dpr_id == row.id)
+                const category = filter.length > 0 ? topics.filter((topic) => topic.id == filter[0].attributes.topic_id) : false
                 return {
                     name: row.name,
                     image: row.image,
                     link: row.link,
-                    topic: category ? (category.length > 0 ? category[0].name : null) : null
+                    topic: category ? (category.length > 0 ? category[0].attributes.name : null) : null
                 }
             }),
             ...includes[2]
@@ -145,40 +187,40 @@ export default class Search extends Component {
 
         if (multi) {
             const results = await Promise.all([
-                (await Promise.all(bc.map(row => {
+                (await Promise.all(bcs.map(row => {
                     try {
-                        if (row.grade_id == level[0].grade_id && row.major_id == subject[0].major_id) {
-                            const filter = bc_topic.filter(bc => bc.id == row.id)
-                            const category = filter.length > 0 ? topic.filter((topic) => topic.id == filter[0].topic_id) : false
+                        if (row.attributes.grade_id == level[0].attributes.grade_id && row.attributes.major_id == subject[0].attributes.major_id) {
+                            const filter = bc_topics.filter(bc => bc.id == row.id)
+                            const category = filter.length > 0 ? topics.filter((topic) => topic.id == filter[0].attributes.topic_id) : false
                             return {
                                 name: row.name,
                                 image: row.image,
                                 link: row.link,
-                                topic: category ? (category.length > 0 ? category[0].name : null) : null
+                                topic: category ? (category.length > 0 ? category[0].attributes.name : null) : null
                             }
                         }
                         return false
                     } catch (error) {
                         return false
                     }
-                }))).filter(bc => bc),
-                (await Promise.all(dpr.map(row => {
+                }))).filter(bcs => bcs),
+                (await Promise.all(dprs.map(row => {
                     try {
-                        if (row.grade_id == level[0].grade_id && row.major_id == subject[0].major_id) {
-                            const filter = dpr_topic.filter(dpr => dpr.id == row.id)
-                            const category = filter.length > 0 ? topic.filter((topic) => topic.id == filter[0].topic_id) : false
+                        if (row.attributes.grade_id == level[0].attributes.grade_id && row.attributes.major_id == subject[0].attributes.major_id) {
+                            const filter = dpr_topics.filter(dpr => dpr.id == row.id)
+                            const category = filter.length > 0 ? topics.filter((topic) => topic.id == filter[0].attributes.topic_id) : false
                             return {
                                 name: row.name,
                                 image: row.image,
                                 link: row.link,
-                                topic: category ? (category.length > 0 ? category[0].name : null) : null
+                                topic: category ? (category.length > 0 ? category[0].attributes.name : null) : null
                             }
                         }
                         return false
                     } catch (error) {
                         return false
                     }
-                }))).filter(dpr => dpr),
+                }))).filter(dprs => dprs),
             ])
             this.setState({ results });
         }
@@ -241,7 +283,7 @@ export default class Search extends Component {
                               <div className="box-content">
                                   <small>{row.topic}</small>
                                   <img
-                                  src={`/${row.image}`}
+                                  src={`${row.image}`}
                                   alt="img"
                                   style={{ width: "100%", height: "100%", borderRadius: "10px" }}
                                   />
@@ -277,7 +319,7 @@ export default class Search extends Component {
                                 <div className="box-content">
                                     <small>{row.topic}</small>
                                     <img
-                                    src={`/${row.image}`}
+                                    src={`${row.image}`}
                                     alt="img"
                                     style={{ width: "100%", height: "100%", borderRadius: "10px" }}
                                     />
@@ -315,7 +357,7 @@ export default class Search extends Component {
                                   <div className="box-content">
                                       <small>{row.topic}</small>
                                       <img
-                                      src={`/${row.image}`}
+                                      src={`${row.image}`}
                                       alt="img"
                                       style={{ width: "100%", height: "100%", borderRadius: "10px" }}
                                       />
