@@ -7,6 +7,10 @@ import Results from './components/Results';
 import Search from './components/Search';
 import MultiSearch from './components/MultiSearch';
 import RandomTopic from './components/RandomTopic';
+import FAQResults from './components/FAQResults';
+import FAQSearch from './components/FAQSearch';
+import FAQMultiSearch from './components/FAQMultiSearch';
+import FAQRandomTopic from './components/FAQRandomTopic';
 // import { major, grade, bc, bc_topic, dpr, dpr_topic, topic } from './dummy/data.json';
 import logo from './styles/logo.png'
 import user from './styles/user.png'
@@ -35,8 +39,13 @@ class App extends Component {
       keyword_majors: [],
       keyword_grades: [],
       bc_topics: [],
-      dpr_topics: []
+      dpr_topics: [],
 
+      faqs: [],
+      questions: [],
+      question_tags: [],
+      tags: [],
+      keyword_faqs: []
     }
   }
 
@@ -51,6 +60,12 @@ class App extends Component {
       axios.get( process.env.REACT_APP_SECRET_CODE + '/api/keyword-grades'),
       axios.get( process.env.REACT_APP_SECRET_CODE + '/api/bc-topics'),
       axios.get( process.env.REACT_APP_SECRET_CODE + '/api/dpr-topics'),
+
+      axios.get( process.env.REACT_APP_SECRET_CODE + '/api/faqs'),
+      axios.get( process.env.REACT_APP_SECRET_CODE + '/api/questions?populate=image'),
+      axios.get( process.env.REACT_APP_SECRET_CODE + '/api/question-tags'),
+      axios.get( process.env.REACT_APP_SECRET_CODE + '/api/tags'),
+      axios.get( process.env.REACT_APP_SECRET_CODE + '/api/keyword-faqs')
     ]).then(axios.spread((...responses) => {
       this.setState({
         isLoaded: true,
@@ -63,6 +78,12 @@ class App extends Component {
         keyword_grades: responses[6].data.data,
         bc_topics: responses[7].data.data,
         dpr_topics: responses[8].data.data,
+
+        faqs: responses[9].data.data,
+        questions: responses[10].data.data,
+        question_tags: responses[11].data.data,
+        tags: responses[12].data.data,
+        keyword_faqs: responses[13].data.data
       })
     }))
   }
@@ -74,7 +95,8 @@ class App extends Component {
   
   render() {
 
-    const { isLoaded, grades, majors, topics, bcs, dprs, keyword_majors, keyword_grades, bc_topics, dpr_topics} = this.state
+    const { isLoaded, grades, majors, topics, bcs, dprs, keyword_majors, keyword_grades, bc_topics, dpr_topics, 
+            faqs, questions, question_tags, tags, keyword_faqs } = this.state
     
     if(!isLoaded) {
       return <div>Loading...</div>
@@ -87,6 +109,12 @@ class App extends Component {
       const fixed = filter.length > 0 ? filter[0] : null
       const category = topics.filter((topic) => topic.id == random.attributes.topic_id)
       let badword = ['kasar','kotor','jelek','jorok']
+
+      const quest = [...question_tags]
+      const faqrandom = quest[Math.floor(Math.random() * quest.length)]
+      const faqfilter = faqrandom.attributes.hasOwnProperty('question_id') ? questions.filter((question) => question.id === faqrandom.attributes.question_id) : questions.filter((question) => question.id === faqrandom.attributes.question_id)
+      const faqfixed = faqfilter.length > 0 ? faqfilter[0] : null
+      const faqcategory = tags.filter((tag) => tag.id == faqrandom.attributes.tag_id)
       
       return (
         <ThemeProvider theme={theme}>
@@ -146,6 +174,11 @@ class App extends Component {
                   label: fixed ? fixed.attributes.name : '',
                   trigger: 'random_topic'
                 },
+                {
+                  value: 'faq',
+                  label: 'FAQ',
+                  trigger: 'faq1'
+                }
               ]
             },
             {
@@ -285,6 +318,162 @@ class App extends Component {
                 },
               ]
             },
+
+            {
+              id: 'faq1',
+              message: "Hai, Selamat datang di menu FAQ",
+              trigger: 'faq2',
+            },
+            {
+              id: 'faq2',
+              message: "Berikut informasi tentang pertanyaan yang sering diajukan oleh pengguna",
+              trigger: 'faq3',
+            },
+            {
+              id: 'faq3',
+              options: [
+                {
+                  value: 'lihat',
+                  label: 'Lihat pertanyaan pilihan',
+                  trigger: 'faq_level1',
+                },
+                {
+                  value: 'cari',
+                  label: 'Cari pertanyaan',
+                  trigger: 'faq_search_option'
+                },
+                {
+                  value: 'random',
+                  label: faqfixed ? faqfixed.attributes.name : '',
+                  trigger: 'faq_random_topic'
+                }
+              ]
+            },
+            {
+              id: 'faq_random_topic',
+              component: <FAQRandomTopic item={{ 
+                                          name: faqfixed.attributes.name, 
+                                          image: process.env.REACT_APP_SECRET_CODE + faqfixed.attributes.image.data.attributes.url, 
+                                          desc: faqfixed.attributes.desc, 
+                                          link: faqfixed.attributes.link, 
+                                          category: faqcategory ? (faqcategory.length > 0 ? faqcategory[0].attributes.name : null) : null 
+                                  }} />,
+              waitAction: true,
+              // asMessage: true,
+              trigger: 'faq_rewind'
+            },
+            {
+              id: 'faq_re_search',
+              message: "Ingin mencari pertanyaan lain?",
+              trigger: 'faq_re_search_option'
+            },
+            {
+              id: 'faq_re_search_option',
+              options: [
+                {
+                  value: 'yes',
+                  label: 'Iya',
+                  trigger: 'faq_search_option'
+                },
+                {
+                  value: 'no',
+                  label: 'Tidak',
+                  trigger: 'faq_rewind'
+                },
+              ]
+            },
+            {
+              id: 'faq_search_option',
+              message: "Silahkan kamu ketik apa yang ingin kamu cari?",
+              trigger: 'faq_search',
+            },
+            {
+              id: 'faq_search',
+              user: true,
+              validator: (value) => {
+                if (value == badword.filter(word => value.toLowerCase().includes(word.toLowerCase()))) {
+                  return 'Kata tidak pantas terdeteksi';             
+                } else {
+                  return true
+                }
+              },
+              trigger: 'faq_search_data'
+            },
+            {
+              id: 'faq_search_data',
+              component: <FAQSearch 
+                            questions={this.state.questions} 
+                            tags={this.state.tags}
+                            question_tags={this.state.question_tags}
+                            keyword_faqs={this.state.keyword_faqs}
+                          />,
+              waitAction: true,
+              // asMessage: true,
+            },
+            
+            {
+              id: 'faq_search_subject',
+              options: faqs.map((subject) => ({ label: subject.attributes.short, value: subject.id, trigger: 'faq_multi_search' })),
+            },
+            
+            {
+              id: 'faq_level1',
+              message: "Berikut beberapa kategori FAQ yang Mejakitabot punya",
+              trigger: 'faq_subject',
+            },
+            {
+              id: 'faq_subject',
+              options: faqs.map((subject) => ({ label: subject.attributes.short, value: subject.id, trigger: 'faq_results' })),
+            },
+            {
+              id: 'faq_multi_search',
+              component: <FAQMultiSearch 
+                            questions={this.state.questions} 
+                            tags={this.state.tags}
+                            question_tags={this.state.question_tags}
+                            keyword_faqs={this.state.keyword_faqs}
+                          />,
+              waitAction: true,
+              // asMessage: true,
+              trigger: 'faq_rewind'
+            },
+            {
+              id: 'faq_results',
+              component: <FAQResults
+                            questions={this.state.questions} 
+                            tags={this.state.tags}
+                            question_tags={this.state.question_tags}
+                        />,
+              waitAction: true,
+              // asMessage: true,
+              trigger: 'faq_rewind'
+            },
+            {
+              id: 'faq_rewind',
+              message: 'Apa kamu masih ingin melakukan hal lain di menu FAQ ini?',
+              trigger: 'faq_rewind_option'
+            },
+            {
+              id: 'faq_rewind_option',
+              options: [
+                {
+                  value: 'yes',
+                  label: 'Iya',
+                  trigger: 'faq2'
+                },
+                {
+                  value: 'no',
+                  label: 'Tidak, terima kasih',
+                  trigger: 'faq_end'
+                },
+              ]
+            },
+            {
+              id: 'faq_end',
+              message: 'Terima kasih telah menggunakan layanan FAQ dari Mejakitabot.',
+              trigger: 'rewind'
+            },
+
             {
               id: 'end',
               message: 'Terima kasih telah menggunakan layanan dari Mejakitabot.',
