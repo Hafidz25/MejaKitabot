@@ -115,6 +115,8 @@ class App extends Component {
       const faqfilter = faqrandom.attributes.hasOwnProperty('question_id') ? questions.filter((question) => question.id === faqrandom.attributes.question_id) : questions.filter((question) => question.id === faqrandom.attributes.question_id)
       const faqfixed = faqfilter.length > 0 ? faqfilter[0] : null
       const faqcategory = tags.filter((tag) => tag.id == faqrandom.attributes.tag_id)
+
+      var faqtext = faqfixed.attributes.name.slice(0, 40) + (faqfixed.attributes.name.length > 40 ? '...' : '')
       
       return (
         <ThemeProvider theme={theme}>
@@ -344,7 +346,7 @@ class App extends Component {
                 },
                 {
                   value: 'random',
-                  label: faqfixed ? faqfixed.attributes.name : '',
+                  label: faqfixed ? faqtext : '',
                   trigger: 'faq_random_topic'
                 }
               ]
@@ -463,7 +465,7 @@ class App extends Component {
                 },
                 {
                   value: 'no',
-                  label: 'Tidak, terima kasih',
+                  label: 'Kembali ke menu',
                   trigger: 'faq_end'
                 },
               ]
@@ -471,7 +473,7 @@ class App extends Component {
             {
               id: 'faq_end',
               message: 'Terima kasih telah menggunakan layanan FAQ dari Mejakitabot.',
-              trigger: 'rewind'
+              trigger: '2'
             },
 
             {
