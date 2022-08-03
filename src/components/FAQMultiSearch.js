@@ -6,6 +6,7 @@ import rehypeRaw from "rehype-raw";
 import '../styles/faqaccordion.css';
 import { v4 as uuidv4 } from 'uuid';
 import axios from 'axios'
+import { Player, Controls } from '@lottiefiles/react-lottie-player';
 
 export default class FAQMultiSearch extends Component {
     
@@ -151,9 +152,16 @@ export default class FAQMultiSearch extends Component {
                         })}
                   </div>
 
-                ) : (
-                        <div>Maaf yah, Mejakitabot tidak dapat menemukan apa yang kamu cari</div>
-                    )}
+                ) : (<div style={{ alignItems: 'center'}}>
+                        <p style={{ textAlign: 'center', fontWeight: 'normal'}}>Mejakitabot tidak dapat menemukan apa yang kamu cari</p>
+                        <Player
+                            autoplay
+                            loop
+                            src="https://assets1.lottiefiles.com/packages/lf20_tmsiddoc.json"
+                            style={{ height: 'auto', width: 'auto' }}
+                            >
+                        </Player>
+                    </div>)}
             </div>
         );
     }

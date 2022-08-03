@@ -6,6 +6,7 @@ import rehypeRaw from "rehype-raw";
 // import { question, question_tag, tag } from '../dummy/data.json';
 import "../styles/faqaccordion.css";
 import { v4 as uuidv4 } from 'uuid';
+import { Player, Controls } from '@lottiefiles/react-lottie-player';
 
 export default class FAQSearch extends Component {
     constructor(props) {
@@ -318,7 +319,19 @@ export default class FAQSearch extends Component {
                               )
                           });
                           })}
-                    </div>) : (result.length > 0 ? `${result[0].keyword} ditemukan, tambahkan kata kunci lainnya` : 'Mejakitabot tidak dapat menemukan apa yang kamu cari'))))}
+                    </div>) : (result.length > 0 ? `${result[0].keyword} ditemukan, tambahkan kata kunci lainnya` 
+                    : (<div style={{ alignItems: 'center'}}>
+                            <p style={{ textAlign: 'center', fontWeight: 'normal'}}>Mejakitabot tidak dapat menemukan apa yang kamu cari</p>
+                            <Player
+                                autoplay
+                                loop
+                                src="https://assets1.lottiefiles.com/packages/lf20_tmsiddoc.json"
+                                style={{ height: 'auto', width: 'auto' }}
+                                >
+                            </Player>
+                        </div>)
+                    
+                    ))))}
             </div>
         )
     }

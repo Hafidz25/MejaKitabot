@@ -25,7 +25,9 @@ export default class RandomTopic extends Component {
                     alt='img' 
                     style={{ width: '100%', height: 'auto', borderRadius: "10px" }} 
                 />
-                <small><a href={link} className='link btn'>Lihat lebih banyak</a></small>
+                <div style={{ alignItems: 'center', justifyContent: 'center'}}>
+                    <small><a href={link} className='link btn'>Lihat lebih banyak</a></small>
+                </div>
             </div>
         );
     }

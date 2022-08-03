@@ -15,6 +15,7 @@ import FAQRandomTopic from './components/FAQRandomTopic';
 import logo from './styles/logo.png'
 import user from './styles/user.png'
 import axios from 'axios'
+import { Player, Controls } from '@lottiefiles/react-lottie-player';
 
 // const bcdpr = [...bc_topic, ...dpr_topic]
 // const random = bcdpr[Math.floor(Math.random() * bcdpr.length)]
@@ -99,7 +100,15 @@ class App extends Component {
             faqs, questions, question_tags, tags, keyword_faqs } = this.state
     
     if(!isLoaded) {
-      return <div>Loading...</div>
+      return <div style={{ alignItems: 'center', justifyContent: 'center' }}>
+              <Player
+                  autoplay
+                  loop
+                  src="https://assets7.lottiefiles.com/packages/lf20_yQz03Y.json"
+                  style={{ height: '500px', width: 'auto'}}
+                  >
+              </Player>
+            </div>
     } else {
 
       const bcdpr = [...bc_topics, ...dpr_topics]
@@ -155,7 +164,7 @@ class App extends Component {
             },
             {
               id: '2',
-              message: "Bolehkah MejaKitabot tahu apa yang ingin kamu lakukan?",
+              message: "Berikut menu yang tersedia di Mejakitabot",
               trigger: '3',
             },
             {

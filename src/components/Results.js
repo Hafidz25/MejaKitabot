@@ -3,6 +3,7 @@ import { Loading } from "react-simple-chatbot";
 // import { bc, bc_topic, dpr, dpr_topic, topic } from "../dummy/data.json";
 import "../styles/accordion.css";
 import { v4 as uuidv4 } from 'uuid';
+import { Player, Controls } from '@lottiefiles/react-lottie-player';
 
 export default class Results extends Component {
   constructor(props) {
@@ -161,11 +162,16 @@ export default class Results extends Component {
               });
             })}
           </div>
-        ) : (
-          <div>
-            Maaf yah, Mejakitabot tidak dapat menemukan apa yang kamu cari
-          </div>
-        )}
+        ) : (<div style={{ alignItems: 'center'}}>
+                <p style={{ textAlign: 'center', fontWeight: 'normal'}}>Mejakitabot tidak dapat menemukan apa yang kamu cari</p>
+                <Player
+                    autoplay
+                    loop
+                    src="https://assets1.lottiefiles.com/packages/lf20_tmsiddoc.json"
+                    style={{ height: 'auto', width: 'auto' }}
+                    >
+                </Player>
+            </div>)}
       </div>
     );
   }
