@@ -14,6 +14,9 @@ import FAQRandomTopic from './components/FAQRandomTopic';
 // import { major, grade, bc, bc_topic, dpr, dpr_topic, topic } from './dummy/data.json';
 import logo from './styles/logo.png'
 import user from './styles/user.png'
+import mejakitty_hello from './styles/mejakitty_hello.PNG' 
+import mejakitty_think from './styles/mejakitty_think.png' 
+ 
 import axios from 'axios'
 import { Player, Controls } from '@lottiefiles/react-lottie-player';
 
@@ -105,7 +108,7 @@ class App extends Component {
                   autoplay
                   loop
                   src="https://assets7.lottiefiles.com/packages/lf20_yQz03Y.json"
-                  style={{ height: '500px', width: 'auto'}}
+                  style={{ height: '500px', width: 'auto' }}
                   >
               </Player>
             </div>
@@ -152,7 +155,10 @@ class App extends Component {
           placeholder="Tulis pesan disini..."
           enableSmoothScroll={true}
           enableMobileAutoFocus={true}
-          
+          customStyle={{
+            background: '#ECEFF1',
+            boxShadow: 'none'
+          }}
           // floating={true}
           
   
@@ -160,6 +166,11 @@ class App extends Component {
             {
               id: '1',
               message: "Hai, aku MejaKitabot!",
+              trigger: '1a',
+            },
+            {
+              id: '1a',
+              component:  <img src={mejakitty_hello} style={{ width: 'auto', height: '150px' }} />,
               trigger: '2',
             },
             {
@@ -189,7 +200,13 @@ class App extends Component {
                   value: 'faq',
                   label: 'FAQ',
                   trigger: 'faq1'
-                }
+                },
+                {
+                  value: 'keluar',
+                  label: 'Keluar',
+                  trigger: 'end'
+                },
+
               ]
             },
             {
@@ -226,6 +243,11 @@ class App extends Component {
                   value: 'no',
                   label: 'Tidak',
                   trigger: 'rewind'
+                },
+                {
+                  value: 'random',
+                  label: fixed ? fixed.attributes.name : '',
+                  trigger: 'random_topic'
                 },
               ]
             },
@@ -333,6 +355,11 @@ class App extends Component {
             {
               id: 'faq1',
               message: "Hai, Selamat datang di menu FAQ",
+              trigger: 'faq1a',
+            },
+            {
+              id: 'faq1a',
+              component:  <img src={mejakitty_think} style={{ width: 'auto', height: '150px' }} />,
               trigger: 'faq2',
             },
             {
@@ -357,6 +384,11 @@ class App extends Component {
                   value: 'random',
                   label: faqfixed ? faqtext : '',
                   trigger: 'faq_random_topic'
+                },
+                {
+                  value: 'kembali',
+                  label: 'Kembali ke menu',
+                  trigger: '2'
                 }
               ]
             },
@@ -488,6 +520,11 @@ class App extends Component {
             {
               id: 'end',
               message: 'Terima kasih telah menggunakan layanan dari Mejakitabot.',
+              trigger: 'end1'
+            },
+            {
+              id: 'end1',
+              component:  <img src={mejakitty_hello} style={{ width: 'auto', height: '150px' }} />,
               end: true
             },
           ]} />

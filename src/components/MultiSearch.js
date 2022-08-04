@@ -4,6 +4,7 @@ import { Loading } from 'react-simple-chatbot';
 import '../styles/accordion.css';
 import { v4 as uuidv4 } from 'uuid';
 import { Player, Controls } from '@lottiefiles/react-lottie-player';
+import mejakitty_sad from '../styles/mejakitty_sad.PNG'
 
 export default class MultiSearch extends Component {
     constructor(props) {
@@ -137,7 +138,7 @@ export default class MultiSearch extends Component {
     render() {
         const { loading, results } = this.state;
         return (
-            <div style={{ width: '100%' }}>
+            <div style={{ width: '100%', background: '#fff', padding: '20px 20px', borderRadius: '10px' }}>
                 { loading ? <Loading /> : results.length > 0 ? (
                     <div style={{}}>
                       {results.map((bcdpr, parentI) => {
@@ -169,7 +170,7 @@ export default class MultiSearch extends Component {
                                     alt="img"
                                     style={{ width: "100%", height: "100%", borderRadius: "10px" }}
                                     />
-                                    <small><a href={row.link} className='link btn'>Lihat lebih banyak</a></small>
+                                    <small><a href={row.link} className='link btn-a'>Lihat lebih banyak</a></small>
                                 </div>
                                 </section>
                                 <input type="radio" name="accordion" id="acc-close" />
@@ -180,15 +181,9 @@ export default class MultiSearch extends Component {
                         })}
                   </div>
 
-                ) : (<div style={{ alignItems: 'center'}}>
+                ) : (<div style={{ alignItems: 'center', justifyContent: 'center' }}>
                         <p style={{ textAlign: 'center', fontWeight: 'normal'}}>Mejakitabot tidak dapat menemukan apa yang kamu cari</p>
-                        <Player
-                            autoplay
-                            loop
-                            src="https://assets1.lottiefiles.com/packages/lf20_tmsiddoc.json"
-                            style={{ height: 'auto', width: 'auto' }}
-                            >
-                        </Player>
+                        <img src={mejakitty_sad} style={{ width: 'auto', height: '150px', margin: 'auto', display: 'block' }} />
                     </div>)}
             </div>
         );

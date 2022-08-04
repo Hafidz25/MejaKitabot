@@ -109,7 +109,7 @@ input:checked + section.box .box-title:before {
 .btn {
   margin-top: 10px;
   position: relative;
-  left: 60px;
+  left: 53px;
   align-items: center;
   border: 1px solid;
   border-color: #1B3F55;
@@ -126,7 +126,41 @@ input:checked + section.box .box-title:before {
 .btn:hover {
   margin-top: 10px;
   position: relative;
+  bottom: 1px;
+  align-items: center;
+  border: 1px solid;
+  border-color: #1B3F55;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  background-color: white;
+  color: #1B3F55;
+  cursor: pointer;
+  padding: 10px 12px;
+  border-radius: 15px;
+  transition: all 0.15s ease-in-out;
+}
+.btn-a {
+  margin-top: 10px;
+  position: relative;
   left: 60px;
+  align-items: center;
+  border: 1px solid;
+  border-color: #1B3F55;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  background-color: #1B3F55;
+  color: white;
+  padding: 10px 12px;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+}
+.btn-a:hover {
+  margin-top: 10px;
+  position: relative;
+  bottom: 1px;
   align-items: center;
   border: 1px solid;
   border-color: #1B3F55;

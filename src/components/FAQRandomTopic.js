@@ -19,7 +19,7 @@ export default class FAQRandomTopic extends Component {
     render() {
         const { name, image, desc, category, link } = this.props.item;
         return (
-            <div style={{ width: '100%' }}>
+            <div style={{ width: '100%', background: '#fff', padding: '20px 20px', borderRadius: '10px' }}>
                 <h3>{name}</h3>
                 <small>{category}</small>
                 <img 

@@ -7,6 +7,7 @@ import rehypeRaw from "rehype-raw";
 import "../styles/faqaccordion.css";
 import { v4 as uuidv4 } from 'uuid';
 import { Player, Controls } from '@lottiefiles/react-lottie-player';
+import mejakitty_sad from '../styles/mejakitty_sad.PNG'
 
 export default class FAQSearch extends Component {
     constructor(props) {
@@ -194,7 +195,7 @@ export default class FAQSearch extends Component {
     render() {
         const { loading, result, results, topicFound } = this.state;
         return (
-            <div style={{ width: '100%' }}>
+            <div style={{ width: '100%', background: '#fff', padding: '20px 20px', borderRadius: '10px' }}>
                 { loading ? <Loading /> : (topicFound[0].length > 0 ? (
                     <div style={{}}>
                     {topicFound.map((materi, parentI) => {
@@ -230,7 +231,7 @@ export default class FAQSearch extends Component {
                                   <p className='text-desc'>
                                     <ReactMarkdown children={row.desc} rehypePlugins={[rehypeRaw]} />
                                   </p>
-                                  <small><a href={row.link} target='_blank' className='link btn'>Lihat lebih banyak</a></small>
+                                  <small><a href={row.link} target='_blank' className='link btn-a'>Lihat lebih banyak</a></small>
                               </div>
                               </section>
                               <input type="radio" name="accordion" id="acc-close" />
@@ -269,7 +270,7 @@ export default class FAQSearch extends Component {
                                     <p className='text-desc'>
                                         <ReactMarkdown children={row.desc} rehypePlugins={[rehypeRaw]} />
                                     </p>
-                                  <small><a href={row.link} target='_blank' className='link btn'>Lihat lebih banyak</a></small>
+                                  <small><a href={row.link} target='_blank' className='link btn-a'>Lihat lebih banyak</a></small>
                                 </div>
                                 </section>
                                 <input type="radio" name="accordion" id="acc-close" />
@@ -310,7 +311,7 @@ export default class FAQSearch extends Component {
                                       <p className='text-desc'>
                                         <ReactMarkdown children={row.desc} rehypePlugins={[rehypeRaw]} />
                                       </p>
-                                      <small><a href={row.link} target='_blank' className='link btn'>Lihat lebih banyak</a></small>
+                                      <small><a href={row.link} target='_blank' className='link btn-a'>Lihat lebih banyak</a></small>
                                   </div>
                                   </section>
                                   <input type="radio" name="accordion" id="acc-close" />
@@ -320,15 +321,9 @@ export default class FAQSearch extends Component {
                           });
                           })}
                     </div>) : (result.length > 0 ? `${result[0].keyword} ditemukan, tambahkan kata kunci lainnya` 
-                    : (<div style={{ alignItems: 'center'}}>
+                    : (<div style={{ alignItems: 'center', justifyContent: 'center' }}>
                             <p style={{ textAlign: 'center', fontWeight: 'normal'}}>Mejakitabot tidak dapat menemukan apa yang kamu cari</p>
-                            <Player
-                                autoplay
-                                loop
-                                src="https://assets1.lottiefiles.com/packages/lf20_tmsiddoc.json"
-                                style={{ height: 'auto', width: 'auto' }}
-                                >
-                            </Player>
+                            <img src={mejakitty_sad} style={{ width: 'auto', height: '150px', margin: 'auto', display: 'block' }} />
                         </div>)
                     
                     ))))}

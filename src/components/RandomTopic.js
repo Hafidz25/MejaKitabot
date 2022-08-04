@@ -17,7 +17,7 @@ export default class RandomTopic extends Component {
     render() {
         const { name, image, category, link } = this.props.item;
         return (
-            <div style={{ width: '100%' }}>
+            <div style={{ width: '100%', background: '#fff', padding: '20px 20px', borderRadius: '10px' }}>
                 <h3>{name}</h3>
                 <small style={{ color: 'red' }}>{category}</small>
                 <img 
