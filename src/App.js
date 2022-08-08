@@ -20,6 +20,7 @@ import mejakitty_think from './styles/mejakitty_think.png'
 import axios from 'axios'
 import { Player, Controls } from '@lottiefiles/react-lottie-player';
 
+
 // const bcdpr = [...bc_topic, ...dpr_topic]
 // const random = bcdpr[Math.floor(Math.random() * bcdpr.length)]
 
@@ -159,7 +160,7 @@ class App extends Component {
             background: '#ECEFF1',
             boxShadow: 'none'
           }}
-          // floating={true}
+          floating={true}
           
   
           steps={[
@@ -201,12 +202,6 @@ class App extends Component {
                   label: 'FAQ',
                   trigger: 'faq1'
                 },
-                {
-                  value: 'keluar',
-                  label: 'Keluar',
-                  trigger: 'end'
-                },
-
               ]
             },
             {

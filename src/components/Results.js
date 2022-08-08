@@ -153,7 +153,7 @@ export default class Results extends Component {
                           alt="img"
                           style={{ width: "100%", height: "100%", borderRadius: "10px" }}
                         />
-                        <small><a href={row.link} className='link btn-a'>Lihat lebih banyak</a></small>
+                        <small><a href={row.link} target='_blank' className='link btn-a'>Lihat lebih banyak</a></small>
                       </div>
                     </section>
                     <input type="radio" name="accordion" id="acc-close" />

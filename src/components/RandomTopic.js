@@ -26,7 +26,7 @@ export default class RandomTopic extends Component {
                     style={{ width: '100%', height: 'auto', borderRadius: "10px" }} 
                 />
                 <div style={{ alignItems: 'center', justifyContent: 'center'}}>
-                    <small><a href={link} className='link btn'>Lihat lebih banyak</a></small>
+                    <small><a href={link} target='_blank' className='link btn'>Lihat lebih banyak</a></small>
                 </div>
             </div>
         );
