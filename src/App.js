@@ -21,15 +21,6 @@ import axios from 'axios'
 import { Player, Controls } from '@lottiefiles/react-lottie-player';
 
 
-// const bcdpr = [...bc_topic, ...dpr_topic]
-// const random = bcdpr[Math.floor(Math.random() * bcdpr.length)]
-
-// const filter = random.hasOwnProperty('bc_id') ? bc.filter((bc) => bc.id === random.bc_id) : dpr.filter((dpr) => dpr.id === random.dpr_id)
-// const fixed = filter.length > 0 ? filter[0] : null
-// const category = topic.filter((topic) => topic.id == random.topic_id)
-// let badword = ['kasar','kotor','jelek','jorok']
-
-
 class App extends Component {
   constructor(props) {
     super(props)
